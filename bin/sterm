@@ -10,16 +10,17 @@
 # sterm | interactive slurm terminal wrapper
 #
 # Author: Tobias Jakobi
-# tjakobi@age.mpg.de
-# Date: 01/07/2015
+# tobias.jakobi@med.uni-heidelberg.de
+# Date: 02/06/2016
 
 # default values
-NAME="interactive_shell_${USER}"
+#NAME="interactive_shell_${USER}"
+NAME="sterm"
 CPUS=2
-MEM=4000
+MEM=4G
 PARTITION=""
 NODE=""
-MAIL="--mail-type=FAIL --mail-user=$USER@age.mpg.de"
+MAIL=""
 
 while [[ $# > 0 ]]
 do
@@ -42,24 +43,21 @@ case $key in
     NODE="-w $2"
     shift
     ;;
-    -q|--quiet)
-    MAIL=""
+    m|--mail)
+    MAIL="--mail-type=FAIL --mail-user=$USER@age.mpg.de"
     shift
     ;;
-    -h|--hi)
-    PARTITION="-p himem"
+    -g|--general)
+    PARTITION="-p general"
     ;;
-    -H|--huge)
-    PARTITION="-p hugemem"
-    ;;
-    -b|--blade)
-    PARTITION="-p blade"
+    -l|--long)
+    PARTITION="-p long"
     ;;
     *)
     echo "sterm | interactive slurm terminal wrapper"
     echo "=========================================="
-    echo "Usage: $0 [-n jobname] [-c number of CPUs (default: 1)] [-m memory in MB (default 4000)] [-N node name] [-q do NOT send error mails]"
-    echo "Partition selection: [-b] blade [-h] himem, [-H] hugemem"
+    echo "Usage: $0 [-n jobname] [-c number of CPUs (default: 1)] [-m memory in MB (default 4000)] [-N node name] [-m send error mails]"
+    echo "Partition selection: [-l] long [-g] general"
     exit 1
     ;;
 esac
@@ -67,9 +65,9 @@ shift
 done
 
 if [ "$NODE" != "" ]; then
-       PARTITION="-p blade,himem,hugemem"
+       PARTITION="-p general"
 fi
 
-echo "[\"$NAME\" @ $PARTITION | $CPUS CPUs | ${MEM} MB]"
+echo "[\"$NAME\" @ $PARTITION | $CPUS CPUs | ${MEM}]"
 srun $NODE $PARTITION -N 1 -c $CPUS --mem=$MEM -J $NAME $MAIL --pty -u /bin/bash --login
 

@@ -6,17 +6,18 @@
 
 This is a repository with shell scripts, manuals and documentation about slurm.
 
+```
 bin/spart  : show information about all partitions (queue), or a specific only
 bin/sterm  : load an interactive bash on a node
 bin/sjob   : show information about a job (wrap 'scontrol show job -d [ID]') in tabular format
 examples/* : example scripts for different tasks
-
+```
 ## Authors
 
 
-Tobias Jakobi
-Sven E. Templer
-Others/Unknown
+- Tobias Jakobi
+- Sven E. Templer
+- Others/Unknown
 
 
 ## Installation
@@ -27,7 +28,7 @@ bin/sterm is installed on the cluster and available via 'module'.
 
 ## Usage
 
-
+```
 bin/spart:
 
 	./spart
@@ -45,10 +46,10 @@ bin/sjob:
 	./sjob
 	./sjob 123
 	./sjob 123 | grep JobState
-
+```
 ## Documentation
 
-
+```
 examples/*:
 
 	script templates with short examples
@@ -64,9 +65,8 @@ example/poppy:
 example/silly:
 
 	more examples, but rather silly ones
-
+```
 
 ## License
 
-
-Copyright
+GNU GENERAL PUBLIC LICENSE Version 3
