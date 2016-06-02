@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# spart - slurm partition settings viewer
+#
+# Copyright (c) 2015 Sven E. Templer <sven.templer@gmail.com>
+
+scontrol show partition $1 | \
+	sed 's/\ /\n/g' | \
+	sed '/^$/d' | \
+	sed 's/PartitionName/=\nPartitionName/' | \
+	column -ts '='

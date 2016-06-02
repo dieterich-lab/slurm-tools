@@ -1,0 +1,3 @@
+#! /bin/sh
+
+echo ${SLURM_TASKS_PER_NODE}

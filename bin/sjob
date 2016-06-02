@@ -1,0 +1,3 @@
+#!/bin/bash
+
+scontrol show job -d $1 | tr ' ' '\n' | sed '/^$/d' | column -s '=' -t

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#SBATCH -n 1
+#SBATCH -N 1
+#SBATCH -o out_1.so
+#SBATCH -e out_1.se
+
+echo "STDOUT"
+echo "STDERR" 1>&2
+
+for i in {01..10}
+do
+	echo $i 1>&2
+	time hostname > /dev/null
+	strace -o out_1.trace$i -c -Ttt hostname
+done
+

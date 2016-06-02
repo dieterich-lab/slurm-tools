@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#SBATCH -N 1
+#SBATCH -o out_all.so
+#SBATCH -e out_all.se
+
+echo "STDOUT"
+echo "STDERR" 1>&2
+
+for i in {01..10}
+do
+	echo $i 1>&2
+	#srun -n1 time hostname > /dev/null
+	srun -n1 strace -o out_all.n1_trace$i -c -Ttt 
+done
+

@@ -1,0 +1,75 @@
+#! /bin/bash
+
+#  ███████╗████████╗███████╗██████╗ ███╗   ███╗
+#  ██╔════╝╚══██╔══╝██╔════╝██╔══██╗████╗ ████║
+#  ███████╗   ██║   █████╗  ██████╔╝██╔████╔██║
+#  ╚════██║   ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║
+#  ███████║   ██║   ███████╗██║  ██║██║ ╚═╝ ██║
+#  ╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝
+#
+# sterm | interactive slurm terminal wrapper
+#
+# Author: Tobias Jakobi
+# tjakobi@age.mpg.de
+# Date: 01/07/2015
+
+# default values
+NAME="interactive_shell_${USER}"
+CPUS=2
+MEM=4000
+PARTITION=""
+NODE=""
+MAIL="--mail-type=FAIL --mail-user=$USER@age.mpg.de"
+
+while [[ $# > 0 ]]
+do
+key="$1"
+
+case $key in
+    -n|--name)
+    NAME="$2"
+    shift
+    ;;
+    -c|--cpu)
+    CPUS="$2"
+    shift
+    ;;
+    -m|--mem)
+    MEM="$2"
+    shift
+    ;;
+    -N|--node)
+    NODE="-w $2"
+    shift
+    ;;
+    -q|--quiet)
+    MAIL=""
+    shift
+    ;;
+    -h|--hi)
+    PARTITION="-p himem"
+    ;;
+    -H|--huge)
+    PARTITION="-p hugemem"
+    ;;
+    -b|--blade)
+    PARTITION="-p blade"
+    ;;
+    *)
+    echo "sterm | interactive slurm terminal wrapper"
+    echo "=========================================="
+    echo "Usage: $0 [-n jobname] [-c number of CPUs (default: 1)] [-m memory in MB (default 4000)] [-N node name] [-q do NOT send error mails]"
+    echo "Partition selection: [-b] blade [-h] himem, [-H] hugemem"
+    exit 1
+    ;;
+esac
+shift
+done
+
+if [ "$NODE" != "" ]; then
+       PARTITION="-p blade,himem,hugemem"
+fi
+
+echo "[\"$NAME\" @ $PARTITION | $CPUS CPUs | ${MEM} MB]"
+srun $NODE $PARTITION -N 1 -c $CPUS --mem=$MEM -J $NAME $MAIL --pty -u /bin/bash --login
+

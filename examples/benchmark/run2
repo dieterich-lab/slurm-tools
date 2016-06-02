@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#SBATCH -n 2
+#SBATCH -N 1
+#SBATCH -o out_2.so
+#SBATCH -e out_2.se
+
+echo "STDOUT"
+echo "STDERR" 1>&2
+
+for i in {01..10}
+do
+	echo $i 1>&2
+	time hostname 
+done
+
