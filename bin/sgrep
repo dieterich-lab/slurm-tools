@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# sgrep - grep slurm queue viewer
+#
+# Copyright (c) 2015 Sven E. Templer <sven.templer@gmail.com>
+
+id=""
+usage="USAGE:
+  $(basename $0) [-i] [-h] PATTERN
+    -i      : print job ids only
+    -h      : print this help and exit
+    PATTERN : a pattern to grep the 'squeue' output for,
+              for example a user or partition name"
+
+while true
+do
+  case $1 in
+    -i)
+      id=1
+      shift
+      ;;
+    -h|--help|--|--*)
+      echo "$usage"
+      exit 0
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+
+if [[ $id ]]
+then
+  squeue | grep "$1" | awk '{print $1}'
+else
+  squeue | grep "$1"
+fi
